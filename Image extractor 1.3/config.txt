@@ -1,3 +1,0 @@
-OCR_ROOT =~/home/zkiihne/workspace/Image extractor 1.3/XML/seri/
-IMAGES_ROOT =~/home/zkiihne/workspace/Image extractor 1.3/IMAGES/seri/
-METADATA_ROOT =~/home/zkiihne/workspace/Image extractor 1.3/DAT/seri/
