@@ -82,6 +82,7 @@ public class methods extends Thread {
 		int lastPage = -1;
 		int imgNum = 1;
 		String address;
+		String addressALT;
 		String nameOfFile;
 		RandomAccessFile raf;
 		TiffDecoder decoder;
@@ -109,6 +110,7 @@ public class methods extends Thread {
 
 					// The address of the folder it should go to
 					address = runner.IMAGES_ROOT + da.substring(0, 5) + "/" + da.substring(11, 15) + "/" + "600/";
+					addressALT = runner.IMAGES_ROOT + da.substring(0, 5) + "/" + da.substring(11, 15) + "/" ;
 					// The name of the file, <journal name>_<page number>_<Image number>_tmbn.tif
 					nameOfFile = inp.substring(11, 30) + "_" + page + "_" + imgNum + "_tmbn";
 					try {
@@ -118,10 +120,17 @@ public class methods extends Thread {
 						decoder = new TiffDecoder(raf);
 						decodedImage = decoder.read();
 						raf.close();
-
+						if(new File(addressALT + "thumbnails/" + nameOfFile + ".png").exists() && !runner.FORCE)
+						{
+							//Already proccessed files will be ignored unless the force command is used
+						}
+						else
+						{
+							
 						// This method will then cut out and save the image
 						methods.cutImage(decodedImage, pList.get(i).get(1), pList.get(i).get(2), pList.get(i).get(3),
-								pList.get(i).get(4), nameOfFile, address, true);
+								pList.get(i).get(4), nameOfFile, addressALT, true);
+						}
 
 					} catch (Exception e) {
 
@@ -136,8 +145,16 @@ public class methods extends Thread {
 							decoder = new TiffDecoder(raf);
 							decodedImage = decoder.read();
 							raf.close();
+							if(new File(addressALT + "thumbnails/" + nameOfFile + ".png").exists() && !runner.FORCE)
+							{
+								
+							}
+							else
+							{
+								
 							methods.cutImage(decodedImage, pList.get(i).get(1), pList.get(i).get(2),
-									pList.get(i).get(3), pList.get(i).get(4), nameOfFile, address, true);
+									pList.get(i).get(3), pList.get(i).get(4), nameOfFile, addressALT, true);
+							}
 
 						} catch (Exception d) {
 
@@ -391,9 +408,9 @@ public class methods extends Thread {
 			// for testing purposes
 			if (save) {
 				// Saves the file to the thumbnails folder
-				File thumbnails = new File(address + "/Thumbnails/");
+				File thumbnails = new File(address + "/thumbnails/");
 				thumbnails.mkdir();
-				File saveFile = new File(address + "/Thumbnails/" + nameOfFile + ".png");
+				File saveFile = new File(address + "/thumbnails/" + nameOfFile + ".png");
 				int hello = classifyAsGraph(image,0,"");
 				String type = "NA";
 				if(hello == 0)
@@ -610,15 +627,12 @@ public class methods extends Thread {
 						fl0[i].delete();
 					}
 				}
-				
-
 				if (directory1.exists()) {
 					for (int i = 0; i < fl1.length; i++) {
 						fl1[i].delete();
 					}
 					
 				}
-
 				if (directory2.exists()) {
 					for (int i = 0; i < fl2.length; i++) {
 						fl2[i].delete();
@@ -945,9 +959,9 @@ public class methods extends Thread {
 			Transformer transformer = transformerFactory.newTransformer();
 			DOMSource source = new DOMSource(doc);
 
-			File folder = new File(address + "/Metadata/");
+			File folder = new File(address + "/metadata/");
 			folder.mkdir();
-			File saveFile = new File(address + "/Metadata/" + nameOfFile + ".xml");
+			File saveFile = new File(address + "/metadata/" + nameOfFile + ".xml");
 
 			StreamResult result = new StreamResult(saveFile);
 
