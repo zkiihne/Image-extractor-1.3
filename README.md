@@ -3,7 +3,7 @@ Project report: Image Extraction Summer project
 Zachary Kiihne
 8/11/2016
 
-The project:
+The project: 
 
 Older scans of Astrophysics journals present a problem for ADS and parsing in general. These files are in the Tagged Image File Format(TIFF for short), which unlike modern day PDF’s are not searchable. As a result they cannot be parsed as easily and cannot have the images simply taken out. The point of this project was to solve this issue, enabling the images to be separated from these older journal scans.
 
