@@ -1,14 +1,16 @@
 package Main;
 
 import java.io.File;
+import java.net.URLDecoder;
 import java.util.Scanner;
 
+import org.junit.Test;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 /**
  * 
  * @author zkiihne
- *
+ * @version 1.6
  */
 public class runner {
 
@@ -27,10 +29,11 @@ public class runner {
 	public static String VOLUME = "";
 	public static String JOURNAL = "";
 	public static long TIME = 0;
+	public static boolean FORCE = false;
 
 	public static void main(String args[]) {
 		TIME = System.currentTimeMillis();
-		File config;
+		File config = null;
 		String[] arguements;
 		boolean functionPerformed = false;
 		
@@ -53,7 +56,29 @@ public class runner {
 				functionPerformed = true;
 			} else {
 				//default config location
-					config = new File("/home/zkiihne/config.txt");
+				
+				try
+				{
+				String path = Test.class.getProtectionDomain().getCodeSource().getLocation().getPath();
+				String decodedPath = URLDecoder.decode(path, "UTF-8");
+				String configRoot = decodedPath.substring(0, decodedPath.length()-18);
+				config = new File(configRoot + "config.txt");
+				//System.out.println("Does this shit work? " + decodedPath.substring(0, decodedPath.length()-18));
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+				}
+				
+					
+			}
+			if (args[0].equals("-f") || args[0].equals("-force")) {
+				FORCE = true;
+				arguements = new String[args.length - 1];
+				for (int i = 1; i < args.length; i++) {
+					arguements[i - 1] = args[i];
+				}
+				args = arguements;
 			}
 
 			try {
@@ -91,7 +116,7 @@ public class runner {
 			System.out.print("-volume/-v:   ");
 			System.out.println(" Extracts the image from a whole volume, specify jounral first");
 			System.out.println(" ex: -j AJ... -v 0111");
-			System.out.print("-bibicode/-b: ");
+			System.out.print("-bibcode/-b: ");
 			System.out.println(" Extracts the image from a specific file, specify jounral and then the volume");
 			System.out.println(" ex: -j AJ... -v 0111 -b 1996AJ....111..109S");
 			System.out.print("-sort/-s:     ");
@@ -132,7 +157,7 @@ public class runner {
 		else if (args.length == 6) {
 			if (((args[2].equals("-v") || args[2].equals("-volume"))
 					&& (args[0].equals("-j") || args[0].equals("-journal")))
-					&& (args[4].equals("-b") || args[4].equals("-bibicode"))) // &&
+					&& (args[4].equals("-b") || args[4].equals("-bibcode"))) // &&
 																				// args[0].equals("-j")&&args)
 			{
 				// prints out what it did
